@@ -1,0 +1,563 @@
+:root {
+  --bg-dark: #f8fafc;
+  --bg-panel: rgba(255, 255, 255, 0.85);
+  --accent-libertario: #d97706;
+  --accent-peronista: #0284c7;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --text-light: #0f172a;
+  --text-dim: #475569;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  --font-main: 'Outfit', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Glassmorphism General */
+.glass {
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Pantallas Overlay (Bienvenida y Modales) */
+.screen-overlay, .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(241, 245, 249, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.screen-overlay.hidden, .modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.welcome-box, .modal-box {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 18px 25px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 98vh;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+  animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.epic-battle-banner {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  max-height: 120px;
+}
+
+#battle-splash-img {
+  width: 100%;
+  height: 120px;
+  display: block;
+  object-fit: cover;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  margin-bottom: 2px;
+  background: linear-gradient(45deg, var(--accent-libertario), var(--accent-peronista));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Facciones */
+.factions-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.faction-card {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.faction-card.libertario:hover {
+  border-color: var(--accent-libertario);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
+  transform: translateY(-2px);
+}
+
+.faction-card.peronista:hover {
+  border-color: var(--accent-peronista);
+  box-shadow: 0 0 15px rgba(2, 132, 199, 0.15);
+  transform: translateY(-2px);
+}
+
+.faction-avatar {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.faction-card h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.faction-card ul {
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.faction-card li {
+  margin-bottom: 3px;
+}
+
+/* Opciones de Juego */
+.game-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.game-settings label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+.game-settings select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: #f1f5f9;
+  color: #0f172a;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Contenedor individual de setting para flex horizontal */
+.setting-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* Botones */
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* UI General */
+#game-ui {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+.game-header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 10;
+}
+
+.title-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.emoji-logo {
+  font-size: 1.5rem;
+}
+
+.turn-indicator {
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.libertarios-text { color: var(--accent-libertario); }
+.peronistas-text { color: var(--accent-peronista); }
+
+/* Layout de la mesa de juego */
+.main-layout {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+#canvas-container {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.side-panel {
+  width: 250px;
+  height: calc(100% - 40px);
+  margin: 20px;
+  border-radius: 16px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  box-shadow: var(--glass-shadow);
+}
+
+.side-panel h3 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  color: var(--text-dim);
+}
+
+.captured-box {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  align-content: start;
+}
+
+.captured-piece-icon {
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  aspect-ratio: 1;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Juez */
+.referee-box {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  padding: 10px 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.referee-box:hover {
+  transform: translateX(-50%) translateY(-5px) scale(1.03);
+  border-color: #0284c7;
+  box-shadow: 0 15px 35px rgba(2, 132, 199, 0.15);
+}
+
+.referee-avatar {
+  font-size: 2.2rem;
+}
+
+.referee-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.referee-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1rem;
+  color: #0284c7;
+}
+
+.clock-display {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: monospace;
+}
+
+.referee-hint {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* Modales */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.alias-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.alias-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-libertario);
+  letter-spacing: 1px;
+  margin: 10px 0;
+}
+
+.btn-copy {
+  background: var(--accent-peronista);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-copy:hover {
+  filter: brightness(1.1);
+}
+
+.disclaimer {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.modal-actions {
+  margin-top: 25px;
+}
+
+/* Notificación Flotante */
+.notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 26, 40, 0.95);
+  border: 2px solid var(--border-color);
+  color: white;
+  padding: 16px 28px;
+  border-radius: 20px;
+  font-weight: 700;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.notification.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -20px);
+}
+
+/* Papelitos / Confetti */
+.confetti-particle {
+  position: absolute;
+  width: 10px;
+  height: 15px;
+  pointer-events: none;
+  z-index: 999;
+  animation: fall linear infinite;
+  opacity: 0.95;
+  border-radius: 2px;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(105vh) rotate(720deg);
+  }
+}
+
+/* Responsividad para pantallas pequeñas y móviles */
+@media (max-width: 900px) {
+  .main-layout {
+    flex-direction: column-reverse;
+  }
+
+  .side-panel {
+    width: calc(100% - 40px);
+    height: 120px;
+    margin: 10px 20px;
+    padding: 12px;
+  }
+
+  .side-panel h3 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+  }
+
+  .captured-box {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+  }
+
+  .captured-piece-icon {
+    font-size: 1.4rem;
+  }
+
+  #canvas-container {
+    height: calc(100vh - 360px);
+    width: 100%;
+  }
+
+  .factions-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .referee-box {
+    bottom: 140px;
+    padding: 6px 16px;
+  }
+
+  .referee-avatar {
+    font-size: 1.8rem;
+  }
+
+  .clock-display {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+

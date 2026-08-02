@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajedrez Político 3D - Libertarios vs Peronistas</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Pantalla de Bienvenida -->
+  <div id="welcome-screen" class="screen-overlay">
+    <div class="welcome-box">
+      <h1>Ajedrez Político 3D</h1>
+      <p class="subtitle">La gran batalla por la República Argentina</p>
+      
+      <div class="epic-battle-banner">
+        <img src="./battle.jpg" alt="Batalla Épica León vs Pingüino" id="battle-splash-img">
+      </div>
+      
+      <div class="factions-container">
+        <div class="faction-card libertario">
+          <div class="faction-avatar">🦁</div>
+          <h3>Libertarios</h3>
+          <ul>
+            <li><strong>Rey:</strong> León con Melena y Motosierra 🪚</li>
+            <li><strong>Color:</strong> Dorado/Blanco</li>
+            <li><strong>Lema:</strong> ¡Viva la libertad carajo!</li>
+          </ul>
+        </div>
+
+        <div class="faction-card peronista">
+          <div class="faction-avatar">✌️</div>
+          <h3>Peronistas</h3>
+          <ul>
+            <li><strong>Reina:</strong> Con Grillete de Madera ⛓️</li>
+            <li><strong>Color:</strong> Azul/Celeste/Negro</li>
+            <li><strong>Lema:</strong> Combatiendo al Capital</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="game-settings">
+        <div class="setting-item">
+          <label for="play-mode">Modo:</label>
+          <select id="play-mode">
+            <option value="ai">IA (Juez Electoral)</option>
+            <option value="local">Local (2 Jugadores)</option>
+          </select>
+        </div>
+        
+        <div class="setting-item">
+          <label for="player-faction">Bando:</label>
+          <select id="player-faction">
+            <option value="w">Libertarios</option>
+            <option value="b">Peronistas</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="start-btn" class="btn-primary">Iniciar Batalla</button>
+    </div>
+  </div>
+
+  <!-- Interfaz de Juego -->
+  <div id="game-ui">
+    <!-- Barra Superior -->
+    <header class="game-header">
+      <div class="title-logo">
+        <span class="emoji-logo">🇦🇷</span>
+        <h2>Ajedrez Político 3D</h2>
+      </div>
+      <div class="turn-indicator" id="turn-indicator">
+        Turno: <span class="turn-faction libertarios-text">Libertarios</span>
+      </div>
+      <button id="reset-btn" class="btn-secondary">Reiniciar</button>
+    </header>
+
+    <!-- Contenedor Principal (Tablero 3D y Paneles) -->
+    <main class="main-layout">
+      <!-- Panel Izquierdo: Capturas Libertarias -->
+      <aside class="side-panel captured-panel left-panel">
+        <h3>Capturas Libertarias</h3>
+        <div id="captured-by-libertarios" class="captured-box">
+          <!-- Piezas comidas por los libertarios se muestran aquí -->
+        </div>
+      </aside>
+
+      <!-- Contenedor del Canvas 3D -->
+      <div id="canvas-container">
+        <!-- El canvas de Three.js se inyecta aquí -->
+      </div>
+
+      <!-- Panel Derecho: Capturas Peronistas -->
+      <aside class="side-panel captured-panel right-panel">
+        <h3>Capturas Peronistas</h3>
+        <div id="captured-by-peronistas" class="captured-box">
+          <!-- Piezas comidas por los peronistas se muestran aquí -->
+        </div>
+      </aside>
+    </main>
+
+    <!-- El Juez y su Reloj de Control -->
+    <div id="referee-clock" class="referee-box clickable">
+      <div class="referee-avatar">👨‍⚖️</div>
+      <div class="referee-info">
+        <span class="referee-title">JUEZ ELECTORAL</span>
+        <div class="clock-display" id="clock-timer">TIEMPO INDEFINIDO</div>
+        <span class="referee-hint">Hacer click para "acelerar" fallos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal del Soborno / Alias MP -->
+  <div id="bribe-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <span class="close-btn" id="close-modal-btn">&times;</span>
+      <div class="modal-icon">💼💵</div>
+      <h2>Influenciar al Poder Judicial</h2>
+      <p>El Juez mira su reloj y te guiña el ojo. El reloj no tiene límites, pero con la contribución correcta, ciertos fallos podrían salir a tu favor.</p>
+      
+      <div class="alias-box">
+        <p>Transferir fondos al alias oficial de la justicia rápida:</p>
+        <div class="alias-value" id="alias-copy-target">patodel82.mp</div>
+        <button id="copy-alias-btn" class="btn-copy">Copiar Alias</button>
+      </div>
+      
+      <p class="disclaimer">Sugerencia de coima: $100.000 ARS (o un choripán/dólar digital). El alias ingresado es real.</p>
+      <div class="modal-actions">
+        <button id="pay-mock-btn" class="btn-primary">Simular Transferencia</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificaciones en Pantalla (Jaque, Jaque Mate, etc.) -->
+  <div id="game-notification" class="notification hidden">
+    <div class="notification-content" id="notification-message">Jaque!</div>
+    <div id="share-action-container" class="hidden">
+      <button id="whatsapp-share-btn" class="btn-primary" style="margin-top: 10px; padding: 8px 16px; font-size: 0.9rem; background: #25d366;">
+        Compartir en WhatsApp 🟢
+      </button>
+    </div>
+  </div>
+
+  <!-- Cargando Scripts -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
