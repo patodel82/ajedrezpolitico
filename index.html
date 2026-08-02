@@ -20,7 +20,7 @@
       </div>
       
       <div class="factions-container">
-        <div class="faction-card libertario">
+        <div class="faction-card libertario selected" id="card-libertario" data-faction="w">
           <div class="faction-avatar">🦁</div>
           <h3>Libertarios</h3>
           <ul>
@@ -30,11 +30,11 @@
           </ul>
         </div>
 
-        <div class="faction-card peronista">
+        <div class="faction-card peronista" id="card-peronista" data-faction="b">
           <div class="faction-avatar">✌️</div>
           <h3>Peronistas</h3>
           <ul>
-            <li><strong>Reina:</strong> Con Grillete de Madera ⛓️</li>
+            <li><strong>Reina:</strong> Con Grillete de Oro ⛓️</li>
             <li><strong>Color:</strong> Azul/Celeste/Negro</li>
             <li><strong>Lema:</strong> Combatiendo al Capital</li>
           </ul>
@@ -42,19 +42,11 @@
       </div>
 
       <div class="game-settings">
-        <div class="setting-item">
-          <label for="play-mode">Modo:</label>
-          <select id="play-mode">
+        <div class="setting-item" style="justify-content: center;">
+          <label for="play-mode">Modo de Juego:</label>
+          <select id="play-mode" style="width: auto;">
             <option value="ai">IA (Juez Electoral)</option>
             <option value="local">Local (2 Jugadores)</option>
-          </select>
-        </div>
-        
-        <div class="setting-item">
-          <label for="player-faction">Bando:</label>
-          <select id="player-faction">
-            <option value="w">Libertarios</option>
-            <option value="b">Peronistas</option>
           </select>
         </div>
       </div>

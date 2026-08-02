@@ -122,21 +122,32 @@ h1 {
 .faction-card {
   flex: 1;
   background: rgba(0, 0, 0, 0.02);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   border-radius: 10px;
   padding: 10px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.faction-card.libertario:hover {
+.faction-card.libertario.selected {
   border-color: var(--accent-libertario);
-  box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
+  background: rgba(217, 119, 6, 0.05);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.2);
+}
+
+.faction-card.peronista.selected {
+  border-color: var(--accent-peronista);
+  background: rgba(2, 132, 199, 0.05);
+  box-shadow: 0 0 15px rgba(2, 132, 199, 0.2);
+}
+
+.faction-card.libertario:hover:not(.selected) {
+  border-color: rgba(217, 119, 6, 0.4);
   transform: translateY(-2px);
 }
 
-.faction-card.peronista:hover {
-  border-color: var(--accent-peronista);
-  box-shadow: 0 0 15px rgba(2, 132, 199, 0.15);
+.faction-card.peronista:hover:not(.selected) {
+  border-color: rgba(2, 132, 199, 0.4);
   transform: translateY(-2px);
 }
 

@@ -24,7 +24,6 @@ let validMoves = [];
 const welcomeScreen = document.getElementById('welcome-screen');
 const startBtn = document.getElementById('start-btn');
 const playModeSelect = document.getElementById('play-mode');
-const playerFactionSelect = document.getElementById('player-faction');
 const turnIndicator = document.getElementById('turn-indicator');
 const resetBtn = document.getElementById('reset-btn');
 const refereeClock = document.getElementById('referee-clock');
@@ -840,18 +839,36 @@ function stopConfetti() {
   document.querySelectorAll('.confetti-particle').forEach(p => p.remove());
 }
 
-// Trigger initial confetti based on default selected faction
-startConfetti(playerFactionSelect.value);
+// DOM elements for faction cards selection
+const factionCards = document.querySelectorAll('.faction-card');
 
-// Listen to faction selection change
-playerFactionSelect.addEventListener('change', (e) => {
-  startConfetti(e.target.value);
+// Set default faction selection value
+let selectedFactionVal = 'w';
+
+// Faction card click listeners
+factionCards.forEach(card => {
+  card.addEventListener('click', () => {
+    // Remove selected state from all cards
+    factionCards.forEach(c => c.classList.remove('selected'));
+    
+    // Add selected state to clicked card
+    card.classList.add('selected');
+    
+    // Update local variable
+    selectedFactionVal = card.getAttribute('data-faction');
+    
+    // Trigger confetti corresponding to the new selection
+    startConfetti(selectedFactionVal);
+  });
 });
+
+// Trigger initial confetti based on default selected faction (Libertarios 'w')
+startConfetti(selectedFactionVal);
 
 // Game flow initialization
 startBtn.addEventListener('click', async () => {
   playMode = playModeSelect.value;
-  playerFaction = playerFactionSelect.value;
+  playerFaction = selectedFactionVal;
 
   stopConfetti(); // Papelitos desaparecen al empezar el juego
 
