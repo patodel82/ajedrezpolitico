@@ -205,53 +205,85 @@ function createPieceMesh(type, color) {
         group.add(f2);
       }
       break;
-
     case 'r': // Rook
-      const wallGeo = new THREE.CylinderGeometry(0.25, 0.28, 0.7, 16);
+      const wallGeo = new THREE.CylinderGeometry(0.25, 0.28, 0.7, 24);
       const wall = new THREE.Mesh(wallGeo, mat);
       wall.position.y = 0.5;
       wall.castShadow = true;
       group.add(wall);
 
-      const topGeo = new THREE.CylinderGeometry(0.3, 0.25, 0.15, 12);
+      const topGeo = new THREE.CylinderGeometry(0.3, 0.25, 0.15, 16);
       const top = new THREE.Mesh(topGeo, mat);
       top.position.y = 0.85;
       top.castShadow = true;
       group.add(top);
       break;
 
-    case 'n': // Knight
-      // Horse shape (Naturally boxy and blocky, perfect for carved look)
-      const bodyGeo = new THREE.BoxGeometry(0.2, 0.5, 0.4);
+    case 'n': // Knight (CABALLO REFORZADO - Figura de caballo muy clara)
+      // Base/Cuerpo curvo
+      const bodyGeo = new THREE.CylinderGeometry(0.1, 0.18, 0.4, 16);
       const body = new THREE.Mesh(bodyGeo, mat);
-      body.position.y = 0.45;
-      body.castShadow = true;
+      body.position.set(0, 0.35, -0.05);
+      body.rotation.x = 0.2;
       group.add(body);
 
-      const headGeo = new THREE.BoxGeometry(0.2, 0.25, 0.35);
+      // Cuello del caballo inclinado hacia adelante
+      const neckGeo = new THREE.BoxGeometry(0.16, 0.35, 0.24);
+      const neck = new THREE.Mesh(neckGeo, mat);
+      neck.position.set(0, 0.55, 0.05);
+      neck.rotation.x = -0.4;
+      group.add(neck);
+
+      // Cabeza y hocico de caballo apuntando hacia abajo/adelante
+      const headGeo = new THREE.BoxGeometry(0.16, 0.18, 0.32);
       const head = new THREE.Mesh(headGeo, mat);
-      head.position.set(0, 0.75, 0.1);
-      head.rotation.x = 0.3;
-      head.castShadow = true;
+      head.position.set(0, 0.75, 0.12);
+      head.rotation.x = 0.2;
       group.add(head);
+
+      // Orejas (Dos pequeños conos a los costados)
+      const ear1 = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.12, 8), mat);
+      ear1.position.set(-0.06, 0.88, 0.02);
+      ear1.rotation.x = -0.2;
+      const ear2 = ear1.clone();
+      ear2.position.x = 0.06;
+      group.add(ear1, ear2);
+
+      // Crin/Pelo del caballo por detrás
+      const maneGeoN = new THREE.BoxGeometry(0.05, 0.4, 0.1);
+      const maneN = new THREE.Mesh(maneGeoN, mat);
+      maneN.position.set(0, 0.5, -0.08);
+      maneN.rotation.x = -0.4;
+      group.add(maneN);
       break;
 
-    case 'b': // Bishop
-      const bStem = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.22, 0.7, 16), mat);
-      bStem.position.y = 0.5;
+    case 'b': // Bishop (ALFIL REFORZADO - Forma de Mitra alta con hendidura y cruz)
+      // Tallo estilizado
+      const bStem = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.2, 0.5, 24), mat);
+      bStem.position.y = 0.4;
       bStem.castShadow = true;
       group.add(bStem);
 
-      const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), mat);
-      bHead.position.y = 0.95;
-      bHead.scale.y = 1.4;
+      // Mitra del Alfil (Huevo alargado hacia arriba)
+      const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 16), mat);
+      bHead.position.y = 0.85;
+      bHead.scale.set(1.0, 1.5, 1.0); // Estirado verticalmente
       bHead.castShadow = true;
       group.add(bHead);
 
-      const cross = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.2, 0.06), mat);
-      cross.position.y = 1.2;
-      group.add(cross);
-      break;
+      // Anillo decorativo medio de la mitra
+      const bRing = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 8, 24), mat);
+      bRing.position.y = 0.75;
+      bRing.rotation.x = Math.PI / 2;
+      group.add(bRing);
+
+      // Cruz pequeña en la punta de la mitra
+      const crossH = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.04, 0.04), mat);
+      crossH.position.y = 1.22;
+      const crossV = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.16, 0.04), mat);
+      crossV.position.y = 1.22;
+      group.add(crossH, crossV);
+      break;;
 
     case 'q': // Queen
       const qStem = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 0.8, 16), mat);
