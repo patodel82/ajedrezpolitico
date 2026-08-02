@@ -3,7 +3,16 @@ import { Chess } from 'chess.js';
 import { AIPlayer } from './ai.js';
 
 // Setup Chess Logic
-let game = new Chess();
+let game = null;
+try {
+  game = new Chess();
+} catch (e) {
+  // Fallback if import is resolved as default export
+  import('chess.js').then((module) => {
+    const ChessConstructor = module.Chess || module.default || module;
+    game = new ChessConstructor();
+  });
+}
 let ai = null;
 let playMode = 'ai'; // 'ai' or 'local'
 let playerFaction = 'w'; // 'w' = Libertarios, 'b' = Peronistas
@@ -839,7 +848,7 @@ playerFactionSelect.addEventListener('change', (e) => {
 });
 
 // Game flow initialization
-startBtn.addEventListener('click', () => {
+startBtn.addEventListener('click', async () => {
   playMode = playModeSelect.value;
   playerFaction = playerFactionSelect.value;
 
@@ -848,6 +857,12 @@ startBtn.addEventListener('click', () => {
   ai = new AIPlayer(playerFaction === 'w' ? 'b' : 'w', 1300);
   
   welcomeScreen.classList.add('hidden');
+  
+  if (!game) {
+    const module = await import('chess.js');
+    const ChessConstructor = module.Chess || module.default || module;
+    game = new ChessConstructor();
+  }
   
   game.reset();
   createBoard();
