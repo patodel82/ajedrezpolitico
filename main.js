@@ -98,11 +98,11 @@ const boardMaterials = {
 };
 
 const pieceMaterials = {
-  w: new THREE.MeshStandardMaterial({ color: 0xcd9a62, roughness: 0.8, metalness: 0.05 }), // Madera Natural Clara (Tallada) - Libertarios
-  b: new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9, metalness: 0.02 }), // Madera Pintada de Negro - Peronistas
-  wood: new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.85, metalness: 0.05 }), // Madera del Grillete
-  metal: new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.6, roughness: 0.4 }), // Metal Mate (Sierra)
-  gold: new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.15, emissive: 0x332200 }) // Oro brillante para el grillete peronista
+  w: new THREE.MeshStandardMaterial({ color: 0xcd9a62, roughness: 0.7, metalness: 0.1 }), // Madera Natural Clara (Tallada)
+  b: new THREE.MeshStandardMaterial({ color: 0x3a3530, roughness: 0.65, metalness: 0.15 }), // Madera Pintada de Negro Carbón (Ligeramente satinado para ver relieve y sombras)
+  wood: new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.75, metalness: 0.05 }), // Madera del Grillete
+  metal: new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.7, roughness: 0.3 }), // Metal Mate (Sierra)
+  gold: new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.1, emissive: 0x221100 }) // Oro brillante pulido para el grillete
 };
 
 // Map chess coordinate e.g. 'e4' to 3D position
@@ -153,8 +153,8 @@ function createPieceMesh(type, color) {
   const group = new THREE.Group();
   const mat = pieceMaterials[color];
 
-  // Common Base for all pieces - Faceted base (8 segments) for hand-carved look
-  const baseGeo = new THREE.CylinderGeometry(0.35, 0.4, 0.15, 8);
+  // Common Base for all pieces - Faceted but higher definition (16 segments) for carved look
+  const baseGeo = new THREE.CylinderGeometry(0.35, 0.4, 0.15, 16);
   const base = new THREE.Mesh(baseGeo, mat);
   base.position.y = 0.075;
   base.castShadow = true;
@@ -162,8 +162,8 @@ function createPieceMesh(type, color) {
 
   switch (type) {
     case 'p': // Pawn
-      // Base stem (8 segments)
-      const stemGeo = new THREE.CylinderGeometry(0.12, 0.2, 0.4, 8);
+      // Base stem
+      const stemGeo = new THREE.CylinderGeometry(0.12, 0.2, 0.4, 16);
       const stem = new THREE.Mesh(stemGeo, mat);
       stem.position.y = 0.35;
       stem.castShadow = true;
@@ -172,27 +172,27 @@ function createPieceMesh(type, color) {
       // Head
       if (color === 'w') {
         // Libertario Pawn: Lion silhouette (Faceted Torus and Sphere)
-        const headGeo = new THREE.TorusGeometry(0.18, 0.06, 6, 8);
+        const headGeo = new THREE.TorusGeometry(0.18, 0.06, 8, 16);
         const head = new THREE.Mesh(headGeo, mat);
         head.position.y = 0.65;
         head.rotation.x = Math.PI / 2;
         head.castShadow = true;
         group.add(head);
 
-        const coreGeo = new THREE.SphereGeometry(0.12, 8, 6);
+        const coreGeo = new THREE.SphereGeometry(0.12, 16, 12);
         const core = new THREE.Mesh(coreGeo, mat);
         core.position.y = 0.65;
         group.add(core);
       } else {
         // Peronista Pawn: Hand with victory sign (Faceted sphere)
-        const sphereGeo = new THREE.SphereGeometry(0.16, 8, 6);
+        const sphereGeo = new THREE.SphereGeometry(0.16, 16, 12);
         const sphere = new THREE.Mesh(sphereGeo, mat);
         sphere.position.y = 0.6;
         sphere.castShadow = true;
         group.add(sphere);
 
-        // Two fingers (V sign) (6 segments)
-        const fingerGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.2, 6);
+        // Two fingers (V sign) (8 segments)
+        const fingerGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.2, 8);
         
         const f1 = new THREE.Mesh(fingerGeo, mat);
         f1.position.set(-0.06, 0.8, 0);
@@ -207,13 +207,13 @@ function createPieceMesh(type, color) {
       break;
 
     case 'r': // Rook
-      const wallGeo = new THREE.CylinderGeometry(0.25, 0.28, 0.7, 8);
+      const wallGeo = new THREE.CylinderGeometry(0.25, 0.28, 0.7, 16);
       const wall = new THREE.Mesh(wallGeo, mat);
       wall.position.y = 0.5;
       wall.castShadow = true;
       group.add(wall);
 
-      const topGeo = new THREE.CylinderGeometry(0.3, 0.25, 0.15, 6);
+      const topGeo = new THREE.CylinderGeometry(0.3, 0.25, 0.15, 12);
       const top = new THREE.Mesh(topGeo, mat);
       top.position.y = 0.85;
       top.castShadow = true;
@@ -237,12 +237,12 @@ function createPieceMesh(type, color) {
       break;
 
     case 'b': // Bishop
-      const bStem = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.22, 0.7, 8), mat);
+      const bStem = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.22, 0.7, 16), mat);
       bStem.position.y = 0.5;
       bStem.castShadow = true;
       group.add(bStem);
 
-      const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 6), mat);
+      const bHead = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), mat);
       bHead.position.y = 0.95;
       bHead.scale.y = 1.4;
       bHead.castShadow = true;
@@ -254,18 +254,18 @@ function createPieceMesh(type, color) {
       break;
 
     case 'q': // Queen
-      const qStem = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 0.8, 8), mat);
+      const qStem = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.24, 0.8, 16), mat);
       qStem.position.y = 0.55;
       qStem.castShadow = true;
       group.add(qStem);
 
-      const qHead = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 6), mat);
+      const qHead = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), mat);
       qHead.position.y = 1.05;
       qHead.castShadow = true;
       group.add(qHead);
 
       // Crown points
-      const crown = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.05, 6, 8), mat);
+      const crown = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.05, 8, 12), mat);
       crown.position.y = 1.1;
       crown.rotation.x = Math.PI / 2;
       group.add(crown);
@@ -277,21 +277,21 @@ function createPieceMesh(type, color) {
         shackleBox.position.y = 0.4;
         shackleGroup.add(shackleBox);
         
-        const hole1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.18, 8), pieceMaterials.gold);
+        const hole1 = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.18, 16), pieceMaterials.gold);
         hole1.position.set(-0.14, 0.4, 0);
         const hole2 = hole1.clone();
         hole2.position.x = 0.14;
         shackleGroup.add(hole1, hole2);
 
         // Gold Chain hanging down (Low-poly)
-        const chainGeo = new THREE.TorusGeometry(0.12, 0.03, 6, 8);
+        const chainGeo = new THREE.TorusGeometry(0.12, 0.03, 12, 16);
         const chain = new THREE.Mesh(chainGeo, pieceMaterials.gold);
         chain.position.set(0, 0.2, 0.15);
         chain.rotation.y = Math.PI / 4;
         shackleGroup.add(chain);
 
         // Gold prisoner ball (Faceted sphere)
-        const ballGeo = new THREE.SphereGeometry(0.2, 8, 6);
+        const ballGeo = new THREE.SphereGeometry(0.2, 16, 12);
         const ball = new THREE.Mesh(ballGeo, pieceMaterials.gold);
         ball.position.set(0.2, 0.1, 0.35);
         shackleGroup.add(ball);
@@ -301,7 +301,7 @@ function createPieceMesh(type, color) {
       break;
 
     case 'k': // King
-      const kStem = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 0.7, 8), mat);
+      const kStem = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 0.7, 16), mat);
       kStem.position.y = 0.35;
       kStem.castShadow = true;
       group.add(kStem);
@@ -309,26 +309,26 @@ function createPieceMesh(type, color) {
       // LIBERTARIO KING: LEÓN TALLADO EN MADERA CON BRAZOS, MOTOSIERRA Y CRUZ REY (Faceted)
       if (color === 'w') {
         // Hombros / Pecho curvo (Faceted cylinder)
-        const chestGeo = new THREE.CylinderGeometry(0.28, 0.22, 0.3, 8);
+        const chestGeo = new THREE.CylinderGeometry(0.28, 0.22, 0.3, 16);
         const chest = new THREE.Mesh(chestGeo, mat);
         chest.position.y = 0.75;
         group.add(chest);
 
         // Cabeza León
-        const lionHeadGeo = new THREE.SphereGeometry(0.2, 32, 32);
+        const lionHeadGeo = new THREE.SphereGeometry(0.2, 16, 12);
         const lionHead = new THREE.Mesh(lionHeadGeo, mat);
         lionHead.position.y = 1.1;
         group.add(lionHead);
 
         // Hocico de León sobresaliendo hacia el frente
-        const snoutGeo = new THREE.CylinderGeometry(0.08, 0.1, 0.15, 16);
+        const snoutGeo = new THREE.CylinderGeometry(0.08, 0.1, 0.15, 12);
         const snout = new THREE.Mesh(snoutGeo, mat);
         snout.position.set(0, 1.05, 0.18);
         snout.rotation.x = Math.PI / 2;
         group.add(snout);
 
         // Orellas de León
-        const earGeo = new THREE.SphereGeometry(0.06, 16, 16);
+        const earGeo = new THREE.SphereGeometry(0.06, 12, 12);
         const earLeft = new THREE.Mesh(earGeo, mat);
         earLeft.position.set(-0.16, 1.25, 0.05);
         const earRight = earLeft.clone();
@@ -336,12 +336,12 @@ function createPieceMesh(type, color) {
         group.add(earLeft, earRight);
 
         // Melena frondosa que rodea la cabeza (Toro + Cono de melena)
-        const maneGeo = new THREE.TorusGeometry(0.22, 0.12, 16, 32);
+        const maneGeo = new THREE.TorusGeometry(0.22, 0.12, 8, 12);
         const mane = new THREE.Mesh(maneGeo, mat);
         mane.position.set(0, 1.1, -0.02);
         group.add(mane);
 
-        const maneBackGeo = new THREE.ConeGeometry(0.32, 0.5, 32);
+        const maneBackGeo = new THREE.ConeGeometry(0.32, 0.5, 16);
         const maneBack = new THREE.Mesh(maneBackGeo, mat);
         maneBack.position.set(0, 0.95, -0.1);
         maneBack.rotation.x = -0.2;
