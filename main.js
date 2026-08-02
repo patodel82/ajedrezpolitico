@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Chess } from 'chess.js';
 import { AIPlayer } from './ai.js';
+import './style.css';
 
 // Setup Chess Logic
 let game = null;
