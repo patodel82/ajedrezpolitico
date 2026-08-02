@@ -690,26 +690,24 @@ function playAIMove() {
   }
 }
 
-// Select cell and process chess moves via click
+// Select cell and process chess moves via pointer events
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-window.addEventListener('click', (event) => {
-  // Prevent raycast triggering if clicking buttons or welcome overlay
-  if (event.target.closest('#welcome-screen') || event.target.closest('#referee-clock') || event.target.closest('#bribe-modal') || event.target.closest('header') || event.target.closest('.side-panel')) {
-    return;
-  }
+// Handle selection using pointerup instead of click (more reliable in Mobile Safari and touch browsers)
+let pointerDownTime = 0;
+let pointerDownPos = { x: 0, y: 0 };
 
+function handlePointerSelection(clientX, clientY) {
   // Calculate mouse position in normalized device coordinates (-1 to +1)
   const rect = renderer.domElement.getBoundingClientRect();
-  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(scene.children, true);
 
   if (intersects.length > 0) {
-    // Find the topmost intersected block which has square information
     let targetMesh = null;
     let parent = intersects[0].object;
     while (parent) {
@@ -722,44 +720,58 @@ window.addEventListener('click', (event) => {
 
     if (targetMesh) {
       const square = targetMesh.userData.square;
-      
-      // If AI's turn, lock interaction
       if (playMode === 'ai' && game.turn() !== playerFaction) return;
 
       if (selectedSquare === square) {
-        // Deselect
         selectedSquare = null;
         validMoves = [];
         resetBoardHighlight();
       } else if (validMoves.includes(square)) {
-        // Complete the move
         executeMove(selectedSquare, square);
       } else {
-        // Check if selected square has a piece of current color
         const piece = game.get(square);
         if (piece && piece.color === game.turn()) {
           selectedSquare = square;
           resetBoardHighlight();
-
-          // Highlight selected
           boardSquares[square].material = boardMaterials.selected;
 
-          // Get legal moves
           const moves = game.moves({ square: square, verbose: true });
           validMoves = moves.map(m => m.to);
 
-          // Highlight valid moves
           for (const targetSq of validMoves) {
             boardSquares[targetSq].material = boardMaterials.validMove;
           }
         } else {
-          // Deselect
           selectedSquare = null;
           validMoves = [];
           resetBoardHighlight();
         }
       }
     }
+  }
+}
+
+// Track starting pointer coordinates to distinguish tap from drag
+window.addEventListener('pointerdown', (event) => {
+  if (event.target.closest('#welcome-screen') || event.target.closest('#referee-clock') || event.target.closest('#bribe-modal') || event.target.closest('header') || event.target.closest('.side-panel')) {
+    return;
+  }
+  pointerDownTime = Date.now();
+  pointerDownPos = { x: event.clientX, y: event.clientY };
+});
+
+window.addEventListener('pointerup', (event) => {
+  if (event.target.closest('#welcome-screen') || event.target.closest('#referee-clock') || event.target.closest('#bribe-modal') || event.target.closest('header') || event.target.closest('.side-panel')) {
+    return;
+  }
+  
+  // Calculate drag distance and click duration
+  const dragDistance = Math.hypot(event.clientX - pointerDownPos.x, event.clientY - pointerDownPos.y);
+  const clickDuration = Date.now() - pointerDownTime;
+
+  // A tap/click in Safari is short and has minimal drag movement (less than 10 pixels)
+  if (dragDistance < 10 && clickDuration < 300) {
+    handlePointerSelection(event.clientX, event.clientY);
   }
 });
 
