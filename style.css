@@ -549,22 +549,58 @@ h1 {
     width: 100%;
   }
 
+  .game-header h2 {
+    font-size: 1.1rem; /* Adaptar título superior del juego */
+  }
+
+  .title-logo {
+    gap: 5px;
+  }
+
+  .turn-indicator {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+  }
+
   .factions-container {
     flex-direction: column;
     gap: 10px;
   }
 
+  /* Reposicionar el Juez electoral para que no tape las piezas de abajo en celular */
   .referee-box {
-    bottom: 140px;
-    padding: 6px 16px;
+    position: absolute;
+    bottom: auto;
+    top: 75px; /* Mover el juez a la esquina superior derecha/flotante sobre el header o de forma discreta */
+    right: 15px;
+    left: auto;
+    transform: none;
+    padding: 5px 12px;
+    gap: 8px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .referee-box:hover {
+    transform: scale(1.03);
   }
 
   .referee-avatar {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
+  }
+
+  .referee-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.05rem;
   }
 
   .clock-display {
-    font-size: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .referee-hint {
+    display: none; /* Ocultar pista de click en celular para ahorrar espacio */
   }
 
   h1 {
