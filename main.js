@@ -572,16 +572,20 @@ function showNotification(text, duration = 3000, showShare = false) {
 }
 
 // Handle Win / Loss / Draw
+let winningFaction = null; // Track who won for the WhatsApp message
+
 function checkGameOver() {
   if (game.isGameOver()) {
     let msg = "Fin de la Partida! ";
     let peronistasWon = false;
     let isCheckmate = false;
+    winningFaction = null;
 
     if (game.isCheckmate()) {
       isCheckmate = true;
       const winner = game.turn() === 'w' ? 'Peronistas' : 'Libertarios';
       msg += `¡Victoria para los ${winner}!`;
+      winningFaction = winner;
       if (winner === 'Peronistas') {
         peronistasWon = true;
       }
@@ -626,12 +630,19 @@ function checkGameOver() {
 
 // WhatsApp Share Event Handler
 whatsappShareBtn.addEventListener('click', () => {
-  // Absolute path to the generated image inside local static files folder
-  const currentUrl = window.location.href;
-  const imageLocation = `${window.location.origin}/leon_motosierra.jpg`;
+  const currentUrl = "https://patodel82.github.io/ajedrezpolitico/";
+  
+  let factionMessage = "";
+  if (winningFaction === 'Libertarios') {
+    factionMessage = "Gano la Libertad CARAJO!!! 🦁🪚";
+  } else if (winningFaction === 'Peronistas') {
+    factionMessage = "CRISTINA LIBRE!!! ✌️⛓️";
+  } else {
+    factionMessage = "¡He terminado una partida en Ajedrez Político 3D! 🇦🇷";
+  }
   
   // Custom message to share
-  const message = `¡He terminado una partida en Ajedrez Político 3D! 🇦🇷\n\n🦁 Viva la libertad carajo!!! 🪚\n\nImagen del León con Motosierra: ${imageLocation}\nJuega gratis aquí: ${currentUrl}`;
+  const message = `${factionMessage}\n\nJuga en ${currentUrl}`;
   
   const encodedText = encodeURIComponent(message);
   const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
